@@ -1,0 +1,171 @@
+Script started on Fri 12 Jul 2024 03:22:55 PM UTC
+^[]0;root@localhost:~^G^[[?1034h[root@localhost ~]#
+^[]0;root@localhost:~^G[root@localhost ~]#
+^[]0;root@localhost:~^G[root@localhost ~]#
+^[]0;root@localhost:~^G[root@localhost ~]#
+^[]0;root@localhost:~^G[root@localhost ~]# pvcreate /dev/sdb
+  Physical volume "/dev/sdb" successfully created.
+^[]0;root@localhost:~^G[root@localhost ~]# vgcreate vg_root /dev/sdb
+  Volume group "vg_root" successfully created
+^[]0;root@localhost:~^G[root@localhost ~]# mkfs.xfs /dev/vg_root/lv_root
+/dev/vg_root/lv_root: No such file or directory
+Usage: mkfs.xfs
+/* blocksize */         [-b log=n|size=num]
+/* metadata */          [-m crc=0|1,finobt=0|1,uuid=xxx]
+/* data subvol */       [-d agcount=n,agsize=n,file,name=xxx,size=num,
+                            (sunit=value,swidth=value|su=num,sw=num|noalign),
+                            sectlog=n|sectsize=num
+/* force overwrite */   [-f]
+/* inode size */        [-i log=n|perblock=n|size=num,maxpct=n,attr=0|1|2,
+                            projid32bit=0|1]
+/* no discard */        [-K]
+/* log subvol */        [-l agnum=n,internal,size=num,logdev=xxx,version=n
+                            sunit=value|su=num,sectlog=n|sectsize=num,
+                            lazy-count=0|1]
+/* label */             [-L label (maximum 12 characters)]
+/* naming */            [-n log=n|size=num,version=2|ci,ftype=0|1]
+/* no-op info only */   [-N]
+/* prototype file */    [-p fname]
+/* quiet */             [-q]
+/* realtime subvol */   [-r extsize=num,size=num,rtdev=xxx]
+/* sectorsize */        [-s log=n|size=num]
+/* version */           [-V]
+                        devicename
+<devicename> is required unless -d name=xxx is given.
+<num> is xxx (bytes), xxxs (sectors), xxxb (fs blocks), xxxk (xxx KiB),
+      xxxm (xxx MiB), xxxg (xxx GiB), xxxt (xxx TiB) or xxxp (xxx PiB).
+<value> is xxx (512 byte blocks).
+^[]0;root@localhost:~^G[root@localhost ~]# lvcreate -n lv_root -l +100%FREE /dev/vg_root
+  Logical volume "lv_root" created.
+^[]0;root@localhost:~^G[root@localhost ~]# mkfs.xfs /dev/vg_root/lv_root
+meta-data=/dev/vg_root/lv_root   isize=512    agcount=4, agsize=655104 blks
+         =                       sectsz=512   attr=2, projid32bit=1
+         =                       crc=1        finobt=0, sparse=0
+data     =                       bsize=4096   blocks=2620416, imaxpct=25
+         =                       sunit=0      swidth=0 blks
+naming   =version 2              bsize=4096   ascii-ci=0 ftype=1
+log      =internal log           bsize=4096   blocks=2560, version=2
+         =                       sectsz=512   sunit=0 blks, lazy-count=1
+realtime =none                   extsz=4096   blocks=0, rtextents=0
+^[]0;root@localhost:~^G[root@localhost ~]# mount /dev/vg_root/lv_root /mnt
+^[]0;root@localhost:~^G[root@localhost ~]# yum install xfsdump
+Loaded plugins: fastestmirror
+Loading mirror speeds from cached hostfile
+^Mbase                                                                                                 | 3.6 kB  00:00:00  $^Mextras                                                                                               | 2.9 kB  00:00:00  $^Mupdates                                                                                              | 2.9 kB  00:00:00  $^M(2/4): base/7/x86_64/primary_db                 0% [                                      ]  0.0 B/s |    0 B  --:--:-- E$^M(3/4): extras/7/x86_64/primary_db               1% [-                                     ] 708 kB/s | 551 kB  00:00:48 E$^M(3/4): base/7/x86_64/primary_db                 4% [=-                                    ] 784 kB/s | 1.6 MB  00:00:42 E$^M(4/4): updates/7/x86_64/primary_db              38% [==============                       ] 2.2 MB/s |  13 MB  00:00:09 E$Resolving Dependencies
+--> Running transaction check
+---> Package xfsdump.x86_64 0:3.1.7-4.el7_9 will be installed
+--> Processing Dependency: attr >= 2.0.0 for package: xfsdump-3.1.7-4.el7_9.x86_64
+--> Running transaction check
+---> Package attr.x86_64 0:2.4.46-13.el7 will be installed
+--> Finished Dependency Resolution
+
+Dependencies Resolved
+
+============================================================================================================================ Package                     Arch                       Version                           Repository                   Size
+============================================================================================================================Installing:
+ xfsdump                     x86_64                     3.1.7-4.el7_9                     updates                     309 k
+Installing for dependencies:
+ attr                        x86_64                     2.4.46-13.el7                     base                         66 k
+
+Transaction Summary
+============================================================================================================================Install  1 Package (+1 Dependent package)
+
+Total download size: 375 k
+Installed size: 1.1 M
+Is this ok [y/d/N]: xfsdump -J - /dev/VolGroup00/LogVol00 | xfsrestore -J - /mnt^H ^H^H ^H^H ^H^H ^H^H ^H^H ^H^H ^H^H ^H^H $Downloading packages:
+^M(2/2): xfsdump-3.1.7-4.el7_9.x86_64.rpm         0% [                                      ]  0.0 B/s |    0 B  --:--:-- E$Public key for attr-2.4.46-13.el7.x86_64.rpm is not installed                                                               ^M(1/2): attr-2.4.46-13.el7.x86_64.rpm                                                                 |  66 kB  00:00:00  $Public key for xfsdump-3.1.7-4.el7_9.x86_64.rpm is not installed                                                            ^M(2/2): xfsdump-3.1.7-4.el7_9.x86_64.rpm                                                              | 309 kB  00:00:00  $----------------------------------------------------------------------------------------------------------------------------Total                                                                                       292 kB/s | 375 kB  00:00:01     Retrieving key from file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+Importing GPG key 0xF4A80EB5:
+ Userid     : "CentOS-7 Key (CentOS 7 Official Signing Key) <security@centos.org>"
+ Fingerprint: 6341 ab27 53d7 8a78 a7c2 7bb1 24c6 a8a7 f4a8 0eb5
+ Package    : centos-release-7-5.1804.el7.centos.x86_64 (@anaconda)
+ From       : /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+Is this ok [y/N]: y
+Running transaction check
+Running transaction test
+Transaction test succeeded
+Running transaction                                                                                                         ^M  Installing : attr-2.4.46-13.el7.x86_64 [                                                                            ] 1$^M  Installing : xfsdump-3.1.7-4.el7_9.x86_64 [                                                                         ] 2$^M  Verifying  : attr-2.4.46-13.el7.x86_64                                                                                1$^M  Verifying  : xfsdump-3.1.7-4.el7_9.x86_64                                                                             2$
+
+Installed:
+  xfsdump.x86_64 0:3.1.7-4.el7_9
+
+Dependency Installed:                                                                                                         attr.x86_64 0:2.4.46-13.el7
+
+Complete!
+^[]0;root@localhost:~^G[root@localhost ~]# xfsdump -J - /dev/VolGroup00/LogVol00 | xfsrestore -J - /mnt
+xfsdump: using file dump (drive_simple) strategy                                                                            xfsdump: version 3.1.7 (dump format 3.0)
+xfsdump: level 0 dump of localhost.localdomain:/                                                                            xfsdump: dump date: Fri Jul 12 15:24:21 2024                                                                                xfsdump: session id: 191dff1f-251b-4f70-83b0-e1117d4b1bb3                                                                   xfsdump: session label: ""                                                                                                  xfsrestore: using file dump (drive_simple) strategy                                                                         xfsrestore: version 3.1.7 (dump format 3.0)                                                                                 xfsrestore: searching media for dump                                                                                        xfsdump: ino map phase 1: constructing initial dump list
+xfsdump: ino map phase 2: skipping (no pruning necessary)
+xfsdump: ino map phase 3: skipping (only one dump stream)
+xfsdump: ino map construction complete
+xfsdump: estimated dump size: 903141312 bytes
+xfsdump: creating dump session media file 0 (media 0, file 0)
+xfsdump: dumping ino map
+xfsdump: dumping directories
+xfsrestore: examining media file 0
+xfsrestore: dump description:
+xfsrestore: hostname: localhost.localdomain                                                                                 xfsrestore: mount point: /                                                                                                  xfsrestore: volume: /dev/mapper/VolGroup00-LogVol00                                                                         xfsrestore: session time: Fri Jul 12 15:24:21 2024                                                                          xfsrestore: level: 0                                                                                                        xfsrestore: session label: ""
+xfsrestore: media label: ""
+xfsrestore: file system id: b60e9498-0baa-4d9f-90aa-069048217fee
+xfsrestore: session id: 191dff1f-251b-4f70-83b0-e1117d4b1bb3
+xfsrestore: media id: e53cadd2-c94b-491f-9dd0-7cb79bfc87d0                                                                  xfsrestore: searching media for directory dump
+xfsrestore: reading directories
+xfsdump: dumping non-directory files
+xfsrestore: 2673 directories and 23407 entries processed
+xfsrestore: directory post-processing                                                                                       xfsrestore: restoring non-directory files
+xfsdump: ending media file                                                                                                  xfsdump: media file size 880310592 bytes                                                                                    xfsdump: dump size (non-dir files) : 867255696 bytes                                                                        xfsdump: dump complete: 47 seconds elapsed                                                                                  xfsdump: Dump Status: SUCCESS                                                                                               xfsrestore: restore complete: 47 seconds elapsed                                                                            xfsrestore: Restore Status: SUCCESS                                                                                         ^[]0;root@localhost:~^G[root@localhost ~]# for i in /proc/ /sys/ /dev/ /run/ /boot/; \
+>  do mount --bind $i /mnt/$i; done
+^[]0;root@localhost:~^G[root@localhost ~]# chroot /mnt/
+^[]0;root@localhost:/^G^[[?1034h[root@localhost /]# grub2-mkconfig -o /boot/grub2/grub.cfg
+Generating grub configuration file ...
+Found linux image: /boot/vmlinuz-3.10.0-862.2.3.el7.x86_64
+Found initrd image: /boot/initramfs-3.10.0-862.2.3.el7.x86_64.img
+done
+^[]0;root@localhost:/^G[root@localhost /]# cd /boot ; for i in `ls initramfs-*img`; \
+> do dracut -v $i `echo $i|sed "s/initramfs-//g; \
+> > s/.img//g"` --force; done                                                                                               sed: -e expression #1, char 18: unknown command: `>'                                                                        Executing: /sbin/dracut -v initramfs-3.10.0-862.2.3.el7.x86_64.img --force                                                  dracut module 'busybox' will not be installed, because command 'busybox' could not be found!                                dracut module 'crypt' will not be installed, because command 'cryptsetup' could not be found!                               dracut module 'dmraid' will not be installed, because command 'dmraid' could not be found!
+dracut module 'dmsquash-live-ntfs' will not be installed, because command 'ntfs-3g' could not be found!
+dracut module 'mdraid' will not be installed, because command 'mdadm' could not be found!
+dracut module 'multipath' will not be installed, because command 'multipath' could not be found!
+dracut module 'busybox' will not be installed, because command 'busybox' could not be found!                                dracut module 'crypt' will not be installed, because command 'cryptsetup' could not be found!
+dracut module 'dmraid' will not be installed, because command 'dmraid' could not be found!
+dracut module 'dmsquash-live-ntfs' will not be installed, because command 'ntfs-3g' could not be found!
+dracut module 'mdraid' will not be installed, because command 'mdadm' could not be found!
+dracut module 'multipath' will not be installed, because command 'multipath' could not be found!                            *** Including module: bash ***
+*** Including module: nss-softokn ***                                                                                       *** Including module: i18n ***                                                                                              *** Including module: drm ***                                                                                               *** Including module: plymouth ***                                                                                          *** Including module: dm ***                                                                                                Skipping udev rule: 64-device-mapper.rules                                                                                  Skipping udev rule: 60-persistent-storage-dm.rules                                                                          Skipping udev rule: 55-dm.rules
+*** Including module: kernel-modules ***
+Omitting driver floppy
+*** Including module: lvm ***
+Skipping udev rule: 64-device-mapper.rules
+Skipping udev rule: 56-lvm.rules
+Skipping udev rule: 60-persistent-storage-lvm.rules
+*** Including module: qemu ***
+*** Including module: resume ***
+*** Including module: rootfs-block ***
+*** Including module: terminfo ***                                                                                          *** Including module: udev-rules ***                                                                                        Skipping udev rule: 40-redhat-cpu-hotplug.rules                                                                             Skipping udev rule: 91-permissions.rules                                                                                    *** Including module: biosdevname ***                                                                                       *** Including module: systemd ***
+*** Including module: usrmount ***
+*** Including module: base ***
+*** Including module: fs-lib ***
+*** Including module: shutdown ***                                                                                          *** Including modules done ***
+*** Installing kernel module dependencies and firmware ***
+*** Installing kernel module dependencies and firmware done ***
+*** Resolving executable dependencies ***
+*** Resolving executable dependencies done***                                                                               *** Hardlinking files ***
+*** Hardlinking files done ***                                                                                              *** Stripping files ***                                                                                                     *** Stripping files done ***                                                                                                *** Generating early-microcode cpio image contents ***                                                                      *** No early-microcode cpio image needed ***                                                                                *** Store current command line parameters ***                                                                               *** Creating image file ***                                                                                                 *** Creating image file done ***
+*** Creating initramfs image file '/boot/initramfs-3.10.0-862.2.3.el7.x86_64.img' done ***
+^[]0;root@localhost:/boot^G[root@localhost boot]# lsblk
+NAME                    MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sda                       8:0    0   40G  0 disk
+├─sda1                    8:1    0    1M  0 part
+├─sda2                    8:2    0    1G  0 part /boot
+└─sda3                    8:3    0   39G  0 part
+  ├─VolGroup00-LogVol00 253:0    0 37.5G  0 lvm
+  └─VolGroup00-LogVol01 253:1    0  1.5G  0 lvm  [SWAP]
+sdb                       8:16   0   10G  0 disk                                                                            └─vg_root-lv_root       253:2    0   10G  0 lvm  /                                                                          sdc                       8:32   0    2G  0 disk                                                                            sdd                       8:48   0    1G  0 disk                                                                            sde                       8:64   0    1G  0 disk                                                                            ^[]0;root@localhost:/boot^G[root@localhost boot]# lvremove /dev/VolGroup00/LogVol00
+  Logical volume VolGroup00/LogVol00 contains a filesystem in use.
+^[]0;root@localhost:/boot^G[root@localhost boot]# exit
+^[]0;root@localhost:~^G[root@localhost ~]# lvremove /dev/VolGroup00/LogVol00
+  Logical volume VolGroup00/LogVol00 contains a filesystem in use.                                                          ^[]0;root@localhost:~^G[root@localhost ~]# lvremove /dev/VolGroup00/LogVol00
+  Logical volume VolGroup00/LogVol00 contains a filesystem in use.
+^[]0;root@localhost:~^G[root@localhost ~]# lvremove /dev/VolGroup00/LogVol00^M^[[C^[[C^[[C^[[C^[[C^[[C^[[C^[[C^[[C^[[C^[[C^$
+
+Script done on Fri 12 Jul 2024 03:27:36 PM UTC
